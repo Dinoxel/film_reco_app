@@ -27,8 +27,7 @@ def hidden_features():
 @st.cache
 def loading_dataframe():
     # Cache la base de base
-    df_full_final_X = pickle.load(open('df_full_final_X.pkl', 'rb'))
-    #df_full_final_X = pd.read_pickle(r"https://github.com/Dinoxel/film_reco_app/blob/main/df_full_final_X.pkl")
+    df_full_final_X = pd.read_pickle(r"https://github.com/Dinoxel/film_reco_app/blob/main/df_full_final_X.pkl")
 
     # Store la base d'affichage
     df_display_final_def = df_full_final_X.copy()[['titleId', 'title', 'multigenres', 'startYear', 'runtimeMinutes', 'averageRating', 'numVotes', 'nconst']]
