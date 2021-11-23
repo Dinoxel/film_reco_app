@@ -1,15 +1,11 @@
 import pandas as pd
 from sklearn.neighbors import NearestNeighbors
-from unidecode import unidecode  # Enlève les accents des lettres
+from unidecode import unidecode
 import streamlit as st
-import webbrowser as webb  # Permet d'ouvrir une page internet via un lien html
-
-# streamlit run C:/Users/simax/PycharmProjects/pythonProject/ereytuk.py
+import webbrowser as webb
 
 pd.set_option('display.width', 7000000)
 pd.set_option('display.max_columns', 100)
-def gen_link(x): return 'C:/Users/simax/Desktop/projets/projet_2/database_imdb/' + x + '.pkl'
-
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # ++++++++++++++++++++++++++++++++++++++++++++ THE APP STARTS HERE ++++++++++++++++++++++++++++++++++++++++++++
@@ -46,7 +42,7 @@ def loading_dataframe(df):
     return df_display_final_def, df_knn_final_def
 
 # Assignation de la DB principale aux bases d'affichage et de machine learning
-df_display_final_X, df_knn_final_X = loading_dataframe(gen_link("df_full_final_X"))
+df_display_final_X, df_knn_final_X = loading_dataframe("df_full_final_X")
 
 #df_posters = pd.read_pickle(gen_link('df_posters'))
 
