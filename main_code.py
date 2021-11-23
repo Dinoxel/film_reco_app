@@ -42,7 +42,7 @@ def loading_dataframe(df):
     return df_display_final_def, df_knn_final_def
 
 # Assignation de la DB principale aux bases d'affichage et de machine learning
-df_display_final_X, df_knn_final_X = loading_dataframe("df_full_final_X")
+df_display_final_X, df_knn_final_X = loading_dataframe("https://github.com/Dinoxel/film_reco_app/blob/main/df_full_final_X.pkl")
 
 #df_posters = pd.read_pickle(gen_link('df_posters'))
 
