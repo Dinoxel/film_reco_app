@@ -32,11 +32,11 @@ def loading_dataframe(df):
         df_full_final_X = pickle.load(pkl_file)
 
     # Store la base d'affichage
-    df_display_final_def = df_full_final_def.copy()[['titleId', 'title', 'multigenres', 'startYear', 'runtimeMinutes', 'averageRating', 'numVotes', 'nconst']]
+    df_display_final_def = df_full_final_X.copy()[['titleId', 'title', 'multigenres', 'startYear', 'runtimeMinutes', 'averageRating', 'numVotes', 'nconst']]
     df_display_final_def['nconst'] = df_display_final_def['nconst'].astype(str)
 
     # Store la base de knn
-    df_knn_final_def = df_full_final_def.copy().drop(columns=['averageRating', 'numVotes', 'startYear', 'runtimeMinutes', 'multigenres', 'years', 'nconst'])
+    df_knn_final_def = df_full_final_X.copy().drop(columns=['averageRating', 'numVotes', 'startYear', 'runtimeMinutes', 'multigenres', 'years', 'nconst'])
     return df_display_final_def, df_knn_final_def
 
 # Assignation de la DB principale aux bases d'affichage et de machine learning
