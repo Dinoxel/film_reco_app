@@ -2,7 +2,6 @@ import pandas as pd
 from sklearn.neighbors import NearestNeighbors
 from unidecode import unidecode
 import streamlit as st
-import webbrowser as webb
 
 pd.set_option('display.width', 7000000)
 pd.set_option('display.max_columns', 100)
@@ -22,10 +21,7 @@ def hidden_features():
     if a == 1:
         st.write("hola")
 
-def get_html_title_page(title_id):
-    # Needs 'import webbrowser as webb'
-    title_id = title_id if title_id[:2] == 'tt' else 'tt' + title_id
-    webb.open("https://www.imdb.com/title/" + title_id + "/", new=2)
+#"https://www.imdb.com/title/" + title_id + "/"
 
 # Chargement de la base principale
 @st.cache
