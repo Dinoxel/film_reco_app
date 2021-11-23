@@ -1,4 +1,4 @@
 pandas
 scikit-learn
 unidecode
-streamlit==0.75.0
+streamlit
