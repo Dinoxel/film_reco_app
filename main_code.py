@@ -2,7 +2,7 @@ import pandas as pd
 from sklearn.neighbors import NearestNeighbors
 from unidecode import unidecode
 import streamlit as st
-import pickle
+import zipfile
 
 pd.set_option('display.width', 7000000)
 pd.set_option('display.max_columns', 100)
@@ -28,7 +28,8 @@ def hidden_features():
 @st.cache
 def loading_dataframe():
     # Cache la base de base
-    df_full_final_X = pd.read_csv("https://github.com/Dinoxel/film_reco_app/blob/master/Desktop/projets/projet_2/database_imdb/zip_full_final_X.zip")
+    zf = zipfile.ZipFile('https://github.com/Dinoxel/film_reco_app/blob/master/Desktop/projets/projet_2/database_imdb/zip_full_final_X.zip') 
+    df_full_final_X = pd.read_csv(zf.open('df_full_final_X.csv'))
 
     # Store la base d'affichage
     df_display_final_def = df_full_final_X.copy()[['titleId', 'title', 'multigenres', 'startYear', 'runtimeMinutes', 'averageRating', 'numVotes', 'nconst']]
