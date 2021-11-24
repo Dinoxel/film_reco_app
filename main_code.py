@@ -28,7 +28,7 @@ def hidden_features():
 @st.cache
 def loading_dataframe():
     # Cache la base de base
-    df_full_final_X = pd.read_csv("https://github.com/Dinoxel/film_reco_app/blob/master/Desktop/projets/projet_2/database_imdb/df_full_final_X.csv")
+    df_full_final_X = pd.read_csv("https://github.com/Dinoxel/film_reco_app/blob/master/Desktop/projets/projet_2/database_imdb/zip_full_final_X.zip")
 
     # Store la base d'affichage
     df_display_final_def = df_full_final_X.copy()[['titleId', 'title', 'multigenres', 'startYear', 'runtimeMinutes', 'averageRating', 'numVotes', 'nconst']]
