@@ -28,10 +28,7 @@ def hidden_features():
 @st.cache
 def loading_dataframe():
     # Cache la base de base
-    #pd.read_csv(zipfile.ZipFile('C:/Users/simax/Desktop/projets/projet_2/database_imdb/zip_full_final_X.zip').open('df_full_final_X.csv'), index_col=0)
-    
-    zf = zipfile.ZipFile('https://github.com/Dinoxel/film_reco_app/blob/master/zip_full_final_X.zip') 
-    df_full_final_X = pd.read_csv(zf.open('df_full_final_X.csv'))
+    df_full_final_X = pd.read_csv(zipfile.ZipFile('C:/Users/simax/Desktop/projets/projet_2/database_imdb/zip_full_final_X.zip').open('df_full_final_X.csv'), index_col=0)
 
     # Store la base d'affichage
     df_display_final_def = df_full_final_X.copy()[['titleId', 'title', 'multigenres', 'startYear', 'runtimeMinutes', 'averageRating', 'numVotes', 'nconst']]
