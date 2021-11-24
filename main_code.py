@@ -1,4 +1,4 @@
-import pandas as pd
+déimport pandas as pd
 from sklearn.neighbors import NearestNeighbors
 from unidecode import unidecode
 import streamlit as st
@@ -107,7 +107,7 @@ weights = df_weights.iloc[0].to_list()
 df_display_titles = df_display_final_X[['titleId', 'title', 'numVotes', 'startYear', 'multigenres']]
 
 # Demande un film à chercher
-film_title = unidecode(st.text_input('Définissez un film pour obtenir des recommendations', key="1")).lower()
+film_title = unidecode(st.text_input("Écrivez le nom d'un film pour obtenir des recommendations", key="1")).lower()
 
 # Condition si la demande fait moins de 3 lettres, repose la question
 if not film_title:
