@@ -1,4 +1,4 @@
-déimport pandas as pd
+import pandas as pd
 from sklearn.neighbors import NearestNeighbors
 from unidecode import unidecode
 import streamlit as st
