@@ -47,53 +47,60 @@ df_display_final_X, df_knn_final_X = loading_dataframe()
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # Selectionne toutes les colonnes booléennes
 X = df_knn_final_X.iloc[:, 2:].columns
+
 # Définit le poids de base pour toutes les colonnes sur 1
 df_weights = pd.DataFrame([[1 for x in X]], columns=X)
 
-# Définit les poids de chaque partie
-weight_genres = 0.65
+# Définit les poids de chaque type de colonnes
+weight_popular_genres = 0.65
+weight_genres_comedy = 1.1
+weight_genres_western = 2
 weight_rating_low = 0.75
-weight_reals = 1.25
-weight_actors = 0.5
+weight_all_reals = 1.25
+weight_all_actors = 0.6
 weight_years = 0.85
 weight_years_low = 0.75
 weight_numvotes_low = 0.5
 weight_numvotes_med = 0.65
 
-df_genres = df_display_final_X.copy()
-df_genres["multigenres"] = df_genres["multigenres"].str.split(',')
-df_genres = df_genres.explode("multigenres")
-film_genres = df_genres["multigenres"].value_counts().head(7).index
+# ======================== Genres ========================
+# Créé un dictionnaire avec le nombre d'occurences de chaque genre à partir de la colonne "multigenres"
+genres_count = defaultdict(int)
+for k in itertools.chain.from_iterable(df_display_final_X["multigenres"].str.split(',')):
+    genres_count[k] += 1
 
-# Gère le poids des genres
-for film_genre in film_genres:
-    df_weights[film_genre] = weight_genres
+# Ne ressort que les genres étant présent plus de 1500 fois
+popular_genres = [genre for genre, count in genres_count.items() if count > 1500]
 
-# Gère le poids du rating <= 7.5
+# Applique le filtre sur tous les genres populaires
+for genre in popular_genres:
+    df_weights[genre] = weight_popular_genres
+
+df_weights['Western'] = weight_genres_western
+df_weights['Comedy'] = weight_genres_comedy
+
+# ======================== Rating inférieur ou égal à 7.5 ========================
 df_weights['rating <= 7.5'] = weight_rating_low
 
-# Gère le poids des réalisateurs
-for real_type in df_weights.loc[:, 'nm0000229':'year <= 1960']:
-    df_weights[real_type] = weight_reals
+# ======================== Réalisateurs ========================
+for real in df_weights.loc[:, 'nm0000229':'year <= 1960']:
+    df_weights[real] = weight_all_reals
 
-# Gère le poids des acteurs
-for actor_type in df_weights.loc[:, 'year >= 1990':'nm9654612']:
-    df_weights[actor_type] = weight_actors
-
-# Gère le poids des années
-for year_type in df_weights.loc[:, 'year <= 1960':'year >= 1990']:
-    df_weights[year_type] = weight_years
+# ======================== Acteurs ========================
+for actor in df_weights.loc[:, 'year >= 1990':'nm9654612']:
+    df_weights[actor] = weight_all_actors
+# ======================== Années ========================
+for year in df_weights.loc[:, 'year <= 1960':'year >= 1990']:
+    df_weights[year] = weight_years
 
 df_weights['year <= 1960'] = weight_years_low
-
-weights = df_weights.iloc[0].to_list()
 df_weights['numvotes <= 3.6k'] = weight_numvotes_low
 df_weights['3.6k < numvotes > 16k'] = weight_numvotes_med
+weights = df_weights.iloc[0].to_list()
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # +++++++++++++++++++++++++++++++++++++++++++++++++++ INPUT +++++++++++++++++++++++++++++++++++++++++++++++++++
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
 # Définit la base à utiliser pour la recherche
 df_display_titles = df_display_final_X[['titleId', 'title', 'numVotes', 'startYear', 'multigenres']]
 
@@ -115,7 +122,7 @@ else:
     # Condition pour les noms de saga, modifie 'film_title' pour la recherche
     for acronym, saga_name in custom_words_dict.items():
         if film_title == acronym:
-            cleaned_name = saga_name
+            cleaned_name = saga_name  # Nécessaire pour afficher le nom de la saga plus loin
             film_title = unidecode(saga_name).lower()
             is_custom_word = True
             break
@@ -175,7 +182,6 @@ else:
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # ++++++++++++++++++++++++++++++++++++++++++++++++++ MACHINE LEARNING ++++++++++++++++++++++++++++++++++++++++++++++++++
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
             st.write("Vous avez sélectionné le film : '" + df_display_titles.iloc[film_index, :].title + "'")
             film_id = df_display_titles.iloc[film_index, :].titleId
             selected_film = df_display_final_X[df_display_final_X['titleId'] == film_id].iloc[:1]
