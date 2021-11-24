@@ -2,6 +2,8 @@ import pandas as pd
 from sklearn.neighbors import NearestNeighbors
 from unidecode import unidecode
 import streamlit as st
+from collections import defaultdict
+import itertools
 
 pd.set_option('display.width', 7000000)
 pd.set_option('display.max_columns', 100)
