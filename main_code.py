@@ -25,7 +25,7 @@ l10n_fr = {'l10n_lang': 'Français (French)',
 l10n_en = {'l10n_lang': 'English',
            'l10n_selector': 'Select a language:',
            'l10n_title': 'Films Recommendation App',
-           'l10n_define_film': 'Write the name of a film to get recommendations',
+           'l10n_define_film': 'Write the name of a film to get recommendations (Input must be a French Film name)',
            'l10n_warning_num_letters': "The title of the film you're looking for must contain at least 3 letters",
            'l10n_warning_no_film': "No films was found, please choose another one.",
            'l10n_saga_lotr_fullname': 'Lord of the Rings',
@@ -42,6 +42,7 @@ lang_selector = st.sidebar.selectbox('', (l10n_en['l10n_lang'], l10n_fr['l10n_la
 if lang_selector == l10n_fr['l10n_lang']:
     l10n = l10n_fr
 else:
+    st.warning('''The database only has French names for the moment; English names are planned to be added soon enough.''')
     l10n = l10n_en
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
