@@ -8,41 +8,71 @@ import itertools
 pd.set_option('display.width', 7000000)
 pd.set_option('display.max_columns', 100)
 
+l10n_fr = {'l10n_lang': 'Français (French)',
+           'l10n_selector': 'Sélectionnez une langue :',
+           'l10n_title': 'App de recommendation de films',
+           'l10n_define_film': "Écrivez le nom d'un film pour obtenir des recommendations",
+           'l10n_warning_num_letters': "Le titre du film que vous recherchez doit comporter au moins 3 lettres",
+           'l10n_warning_no_film': "Aucun film ne correspond à votre recherche, veuillez en choisir un autre.",
+           'l10n_saga_lotr_fullname': 'Seigneur des anneaux',
+           'l10n_found_films': "Les films suivants ressortent d'après votre recherche :",
+           'l10n_choose_index_saga': "Choissisez l'index du film souhaité pour la saga '{}' :",
+           'l10n_choose_index_normal': "Pour le sélectionner écrivez 0, sinon écrivez l'index du film souhaité :",
+           'l10n_relevant_film': "Le film le plus pertinent semble être '{}' de {}.",
+           'l10n_warning_index_not_present': "Il semblerait que l'index {} ne soit pas dans la liste, veuillez sélectionner un index valide",
+           'l10n_selected_film': "Vous avez sélectionné le film : '{}'"}
+
+l10n_en = {'l10n_lang': 'English',
+           'l10n_selector': 'Select a language:',
+           'l10n_title': 'Films Recommendation App',
+           'l10n_define_film': 'Write the name of a film to get recommendations',
+           'l10n_warning_num_letters': "The title of the film you're looking for must contain at least 3 letters",
+           'l10n_warning_no_film': "No films was found, please choose another one.",
+           'l10n_saga_lotr_fullname': 'Lord of the Rings',
+           'l10n_found_films': "The following films result from your search:",
+           'l10n_choose_index_saga': "Choose the wished film's index for the '{}' saga:",
+           'l10n_choose_index_normal': "In order to select it, write 0, otherwise write the number of the desired film:",
+           'l10n_relevant_film': "The most relevant seems to be '{}' from {}.",
+           'l10n_warning_index_not_present': "It seems that the index {} isn't in the list, please select a valid index",
+           'l10n_selected_film': "You have selected the film: '{}'"}
+
+
+lang_selector = st.sidebar.selectbox('', (l10n_en['l10n_lang'], l10n_fr['l10n_lang']))
+
+if lang_selector == l10n_fr['l10n_lang']:
+    l10n = l10n_fr
+else:
+    l10n = l10n_en
+
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # ++++++++++++++++++++++++++++++++++++++++++++ THE APP STARTS HERE ++++++++++++++++++++++++++++++++++++++++++++
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-st.title('Film Recommendation App')
+st.title(l10n['l10n_title'])
 
-def hidden_features():
-    add_selectbox = st.sidebar.selectbox(
-        "How would you like to be contacted?",
-        ("Email", "Home phone", "Mobile phone")
-    )
-
-    a = st.sidebar.radio('Select one:', [1, 2])
-    if a == 1:
-        st.write("hola")
-
-#"https://www.imdb.com/title/" + title_id + "/"
+# "https://www.imdb.com/title/" + title_id + "/"
 
 # Chargement de la base principale
 @st.cache
 def loading_dataframe():
     # Cache la base de base
-    df_full_final_X = pd.read_csv('https://media.githubusercontent.com/media/Dinoxel/film_reco_app/master/Desktop/projets/projet_2/database_imdb/df_full_final_X.csv', index_col=0)
+    df_full_final_X = pd.read_csv(
+        'https://media.githubusercontent.com/media/Dinoxel/film_reco_app/master/Desktop/projets/projet_2/database_imdb/df_full_final_X.csv',
+        index_col=0)
 
     # Store la base d'affichage
-    df_display_final_def = df_full_final_X.copy()[['titleId', 'title', 'multigenres', 'startYear', 'runtimeMinutes', 'averageRating', 'numVotes', 'nconst']]
+    df_display_final_def = df_full_final_X.copy()[
+        ['titleId', 'title', 'multigenres', 'startYear', 'runtimeMinutes', 'averageRating', 'numVotes', 'nconst']]
     df_display_final_def['nconst'] = df_display_final_def['nconst'].astype(str)
 
     # Store la base de knn
-    df_knn_final_def = df_full_final_X.copy().drop(columns=['averageRating', 'numVotes', 'startYear', 'runtimeMinutes', 'multigenres', 'years', 'nconst'])
+    df_knn_final_def = df_full_final_X.copy().drop(
+        columns=['averageRating', 'numVotes', 'startYear', 'runtimeMinutes', 'multigenres', 'years', 'nconst'])
     return df_display_final_def, df_knn_final_def
 
 # Assignation de la DB principale aux bases d'affichage et de machine learning
 df_display_final_X, df_knn_final_X = loading_dataframe()
 
-#df_posters = pd.read_pickle(gen_link('df_posters'))
+# df_posters = pd.read_pickle(gen_link('df_posters'))
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # ++++++++++++++++++++++++++++++++++++++++++++++++++ WEIGHTS ++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -107,16 +137,16 @@ weights = df_weights.iloc[0].to_list()
 df_display_titles = df_display_final_X[['titleId', 'title', 'numVotes', 'startYear', 'multigenres']]
 
 # Demande un film à chercher
-film_title = unidecode(st.text_input("Écrivez le nom d'un film pour obtenir des recommendations", key="1")).lower()
+film_title = unidecode(st.text_input(l10n['l10n_define_film'])).lower()
 
 # Condition si la demande fait moins de 3 lettres, repose la question
 if not film_title:
     st.write("")
 elif len(film_title) <= 2:
-    st.warning("L'objet de la recherche doit comporter au moins 3 lettres")
+    st.warning(l10n['l10n_warning_num_letters'])
 else:
     is_custom_word = False
-    custom_words_dict = {'lotr': 'Le Seigneur des anneaux',
+    custom_words_dict = {'lotr': l10n['l10n_saga_lotr_fullname'],
                          'star wars': 'Star Wars',
                          'harry potter': 'Harry Potter',
                          'indiana jones': 'Indiana Jones'}
@@ -130,46 +160,47 @@ else:
             break
 
     # Recherche le film demandé dans la base de données
-    df_display_titles = df_display_titles[df_display_titles['title'].apply(lambda x: unidecode(x.lower())).str.contains(film_title)]
+    df_display_titles = df_display_titles[
+        df_display_titles['title'].apply(lambda x: unidecode(x.lower())).str.contains(film_title)]
 
     # Si au moins un film correspond à la recherche
 
     if not len(df_display_titles) > 0:
-        st.warning("Aucun film ne correspond à votre recherche, veuillez en choisir un autre.")
+        st.warning(l10n['l10n_warning_no_film'])
     else:
 
-# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# ++++++++++++++++++++++++++++++++++++++++++++++++ INPUT INDEX ++++++++++++++++++++++++++++++++++++++++++++++++
-# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        # ++++++++++++++++++++++++++++++++++++++++++++++++ INPUT INDEX ++++++++++++++++++++++++++++++++++++++++++++++++
+        # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         film_index = 123456789
-        # condition si un seul film présent après recherche
+        # condition si un seul film est présent après recherche
         if len(df_display_titles) == 1:
             film_index = 0
 
-        # condition si plusieurs film ont le même nom
+        # condition si plusieurs films ont le même nom
         else:
-            st.write("Les films suivants ressortent d'après votre recherche :")
+            st.write(l10n['l10n_found_films'])
 
             # condition pour la recherche par saga
             if is_custom_word:
                 df_display_titles = df_display_titles.sort_values(by=['startYear', 'title']).reset_index()
                 st.dataframe(df_display_titles[['startYear', 'title']])
-                text_index_input = f"Choissisez l'index du film souhaité pour la saga '{cleaned_name}' :"
+                text_index_input = l10n['l10n_choose_index_saga'].format(cleaned_name)
 
             # condition pour la recherche standard
             else:
                 df_display_titles = df_display_titles.sort_values(by='numVotes', ascending=False).reset_index()
                 st.dataframe(df_display_titles[['startYear', 'title', 'multigenres']])
                 first_film = df_display_titles.iloc[0]
-                text_index_input = "Pour le sélectionner écrivez 0, sinon écrivez le numéro du film souhaité :"
-                st.write(f"Le film le plus pertinent semble être '{first_film.title}' de {first_film.startYear}.")
+                text_index_input = l10n['l10n_choose_index_normal']
+                st.write(l10n['l10n_relevant_film'].format(first_film.title, first_film.startYear))
 
-            selected_film = st.text_input(text_index_input, key="2")
+            selected_film = st.text_input(text_index_input)
 
             if selected_film:
                 # condition si l'index n'est pas dans la liste
                 if int(selected_film) not in list(range(len(df_display_titles))):
-                    st.warning("Il semblerait que l'index", str(selected_film), "ne soit pas dans la liste, veuillez sléctionner un index valide")
+                    st.warning(l10n['l10n_warning_index_not_present'].format(str(selected_film)))
                 else:
                     film_index = df_display_titles.index[int(selected_film)]
             else:
@@ -181,10 +212,10 @@ else:
             st.write('')
         else:
 
-# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# ++++++++++++++++++++++++++++++++++++++++++++++++++ MACHINE LEARNING ++++++++++++++++++++++++++++++++++++++++++++++++++
-# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-            st.write("Vous avez sélectionné le film : '" + df_display_titles.iloc[film_index, :].title + "'")
+            # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            # ++++++++++++++++++++++++++++++++++++++++++++++++++ MACHINE LEARNING ++++++++++++++++++++++++++++++++++++++++++++++++++
+            # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            st.write(l10n['l10n_selected_film'].format(df_display_titles.iloc[film_index, :].title))
             film_id = df_display_titles.iloc[film_index, :].titleId
             selected_film = df_display_final_X[df_display_final_X['titleId'] == film_id].iloc[:1]
 
@@ -195,8 +226,10 @@ else:
 
             # MACHINE LEARNING
             while True:
-                model_nn = NearestNeighbors(n_neighbors=n_neighbors_num, metric_params={"w": weights}, metric='wminkowski').fit(X)
-                selected_films_index = model_nn.kneighbors(df_knn_final_X[df_knn_final_X['titleId'] == film_id].iloc[:1, 2:])[1][0][1:]
+                model_nn = NearestNeighbors(n_neighbors=n_neighbors_num, metric_params={"w": weights},
+                                            metric='wminkowski').fit(X)
+                selected_films_index = \
+                model_nn.kneighbors(df_knn_final_X[df_knn_final_X['titleId'] == film_id].iloc[:1, 2:])[1][0][1:]
 
                 # Augmente les voisins n si le film est présent dans la liste de recommendation
                 # Bidouillage
@@ -223,12 +256,11 @@ else:
             # Affiche la recommendation de films
             st.dataframe(predicted_films)
 
-
             # get_html_title_page('0110912')
-            #print(predicted_films)
+            # print(predicted_films)
+
 
 def display_files():
-
     LOGO_IMAGE = "https://www.themoviedb.org/t/p/original/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg"
 
     st.markdown(
@@ -248,7 +280,7 @@ def display_files():
             float:right;
             width: 19%;
         }
-        
+
         .container .logo-img:last-child {
         margin-right:0;
         }
@@ -261,16 +293,15 @@ def display_files():
         unsafe_allow_html=True
     )
 
-    a =     """<div class="container">
+    a = """<div class="container">
             <img class="logo-img" src="{LOGO_IMAGE}">
             <p class="logo-text">{name}</p>
         </div>"""
-
 
     st.markdown(f"""
         <div class="container">
         {[print(f'<img class="logo-img" src="{LOGO_IMAGE}">') for x in range(5)]}
         </div>
         """,
-        unsafe_allow_html=True
-    )
+                unsafe_allow_html=True
+                )
