@@ -1,7 +1,6 @@
 Choses à faire
 * Ajouter les noms des films anglais
 * Faire en sorte que la barre de recherche ne détecte ue 'Alien(s)' et pas 'itAlien'
-* Ajouter un système de changements de langue
 * Modifier comment les films apparaissent à la fin
 * Faire en sorte que les selections soient cliquables au lieu de devoir rentrer un nouvel input d'index
 
