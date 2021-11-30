@@ -20,7 +20,7 @@ l10n_fr = {'l10n_lang': 'Français (French)',
            'l10n_choose_index_normal': "Pour le sélectionner écrivez 0, sinon écrivez l'index du film souhaité :",
            'l10n_relevant_film': "Le film le plus pertinent semble être '{}' de {}.",
            'l10n_warning_index_not_present': "Il semblerait que l'index {} ne soit pas dans la liste, veuillez sélectionner un index valide",
-           'l10n_selected_film': "Vous avez sélectionné le film : '{}'"}
+           'l10n_selected_film': "Vous avez sélectionné le film : '{}'"}
 
 l10n_en = {'l10n_lang': 'English',
            'l10n_selector': 'Select a language:',
@@ -39,6 +39,7 @@ l10n_en = {'l10n_lang': 'English',
 
 lang_selector = st.sidebar.selectbox('', (l10n_en['l10n_lang'], l10n_fr['l10n_lang']))
 
+# Système de localization et l10n implémentés après fin du projet par Axel Simond
 if lang_selector == l10n_fr['l10n_lang']:
     l10n = l10n_fr
 else:
@@ -84,7 +85,7 @@ X = df_knn_final_X.iloc[:, 2:].columns
 # Définit le poids de base pour toutes les colonnes sur 1
 df_weights = pd.DataFrame([[1 for x in X]], columns=X)
 
-# Définit les poids de chaque type de colonnes
+# Définit les poids par type de colonnes
 weight_popular_genres = 0.65
 weight_genres_comedy = 1.1
 weight_genres_western = 2
