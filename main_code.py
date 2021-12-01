@@ -16,11 +16,11 @@ l10n_fr = {'l10n_lang': 'Français (French)',
            'l10n_warning_no_film': "Aucun film ne correspond à votre recherche, veuillez en choisir un autre.",
            'l10n_saga_lotr_fullname': 'Seigneur des anneaux',
            'l10n_found_films': "Les films suivants ressortent d'après votre recherche :",
-           'l10n_choose_index_saga': "Choissisez l'index du film souhaité pour la saga '{}' :",
+           'l10n_choose_index_saga': "Choissisez l'index du film souhaité pour la saga « {} » :",
            'l10n_choose_index_normal': "Pour le sélectionner écrivez 0, sinon écrivez l'index du film souhaité :",
-           'l10n_relevant_film': "Le film le plus pertinent semble être '{}' de {}.",
+           'l10n_relevant_film': "Le film le plus pertinent semble être « {} » de {}.",
            'l10n_warning_index_not_present': "Il semblerait que l'index {} ne soit pas dans la liste, veuillez sélectionner un index valide",
-           'l10n_selected_film': "Vous avez sélectionné le film : '{}'"}
+           'l10n_selected_film': "Vous avez sélectionné le film : « {} »"}
 
 l10n_en = {'l10n_lang': 'English',
            'l10n_selector': 'Select a language:',
