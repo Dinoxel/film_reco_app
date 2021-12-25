@@ -37,7 +37,7 @@ l10n_en = {'l10n_lang': 'English',
            'l10n_selected_film': "You have selected the film: '{}'"}
 
 
-lang_selector = st.sidebar.selectbox('', (l10n_en['l10n_lang'], l10n_fr['l10n_lang']))
+lang_selector = st.sidebar.selectbox('', (l10n_fr['l10n_lang'], l10n_en['l10n_lang']))
 
 # Système de localization et l10n implémentés après fin du projet par Axel Simond
 if lang_selector == l10n_fr['l10n_lang']:
