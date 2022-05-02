@@ -18,8 +18,9 @@ l10n_fr = {
     'warning_no_film': "Aucun film ne correspond à votre recherche, veuillez en choisir un autre.",
     'saga_lotr_fullname': 'Seigneur des anneaux',
     'found_films': "Les films suivants ressortent d'après votre recherche :",
-    'choose_index_saga': "Choissisez l'index du film souhaité pour la saga « {} » :",
+    'choose_index_saga': "Choisissez l'index du film souhaité pour la saga « {} » :",
     'choose_index_normal': "Pour le sélectionner écrivez 0, sinon écrivez l'index du film souhaité :",
+    'warning_letter_instead_of_index': "Veuillez écrire l'index sous la forme d'un nombre.",
     'relevant_film': "Le film le plus pertinent semble être « {} » de {}.",
     'warning_index_not_present': "Il semblerait que l'index {} ne soit pas dans la liste, veuillez sélectionner un index valide",
     'selected_film': "Vous avez sélectionné le film : « {} »"
@@ -36,6 +37,7 @@ l10n_en = {
     'found_films': "The following films result from your search:",
     'choose_index_saga': "Choose the wished film's index for the '{}' saga:",
     'choose_index_normal': "In order to select it, write 0, otherwise write the number of the desired film:",
+    'warning_letter_instead_of_index': "Please write the index as a number.",
     'relevant_film': "The most relevant seems to be '{}' from {}.",
     'warning_index_not_present': "It seems that the index {} isn't in the list, please select a valid index",
     'selected_film': "You have selected the film: '{}'"
@@ -211,6 +213,8 @@ else:
                 # condition si l'index n'est pas dans la liste
                 if int(selected_film) not in list(range(len(df_display_titles))):
                     st.warning(l10n['warning_index_not_present'].format(str(selected_film)))
+                elif not selected_film.isalnum():
+                    st.warning(l10n['warning_letter_instead_of_index'])
                 else:
                     film_index = df_display_titles.index[int(selected_film)]
             else:
