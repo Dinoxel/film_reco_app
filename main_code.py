@@ -292,10 +292,10 @@ else:
                 predicted_films = pd.concat([predicted_films, df_display_final_x.iloc[[film_index]]], ignore_index=True)
 
             # Affiche le filmé sélectionné
-            st.dataframe(df_prettifier(selected_film.loc[:, 1:]), final=True)
+            st.dataframe(df_prettifier(selected_film), final=True)
 
             # Affiche la recommendation de films
-            st.dataframe(df_prettifier(predicted_films.loc[:, 1:]), final=True)
+            st.dataframe(df_prettifier(predicted_films), final=True)
 
             # get_html_title_page('0110912')
             # print(predicted_films)
