@@ -292,6 +292,10 @@ else:
                 predicted_films = pd.concat([predicted_films, df_display_final_x.iloc[[film_index]]], ignore_index=True)
 
             # Affiche le filmé sélectionné
+            st.write(selected_film)
+            st.write(selected_film.loc[:, 1:])
+            st.write(df_prettifier(selected_film.loc[:, 1:], final=True))
+
             st.dataframe(df_prettifier(selected_film.loc[:, 1:], final=True))
 
             # Affiche la recommendation de films
