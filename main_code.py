@@ -20,9 +20,8 @@ l10n_fr = {
     'found_films': "Les films suivants ressortent d'après votre recherche :",
     'choose_index_saga': "Choisissez l'index du film souhaité pour la saga « {} » :",
     'choose_index_normal': "Pour le sélectionner écrivez 0, sinon écrivez l'index du film souhaité :",
-    'warning_letter_instead_of_index': "Veuillez écrire l'index sous la forme d'un nombre.",
     'relevant_film': "Le film le plus pertinent semble être « {} » de {}.",
-    'warning_index_not_present': "Il semblerait que l'index {} ne soit pas dans la liste, veuillez sélectionner un index valide",
+    'film_selector': 'Sélectionner le film voulue dans la liste (par défaut : {} ({})).',
     'selected_film': "Vous avez sélectionné le film : « {} »"
 }
 
@@ -37,9 +36,8 @@ l10n_en = {
     'found_films': "The following films result from your search:",
     'choose_index_saga': "Choose the wished film's index for the '{}' saga:",
     'choose_index_normal': "In order to select it, write 0, otherwise write the number of the desired film:",
-    'warning_letter_instead_of_index': "Please write the index as a number.",
     'relevant_film': "The most relevant seems to be '{}' from {}.",
-    'warning_index_not_present': "It seems that the index {} isn't in the list, please select a valid index",
+    'film_selector': 'Select the desired film in the list (default: {} ({})).',
     'selected_film': "You have selected the film: '{}'"
 }
 
@@ -209,8 +207,10 @@ else:
 
             df_titles_selector = df_display_titles["title"] + " (" + df_display_titles["startYear"].astype(str) + ")"
 
+
+
             film_selection = st.selectbox(
-                'Sélectionner le film voulue dans la liste (par défaut {} ({})).'.format(first_film.title,first_film.startYear),
+                l10n["film_selector"].format(first_film.title, first_film.startYear),
                 df_titles_selector.to_list())
 
             film_index = df_titles_selector[df_titles_selector == film_selection].index[0]
@@ -221,7 +221,6 @@ else:
         if film_index == 123456789:
             st.write('')
         else:
-
             # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
             # ++++++++++++++++++++++++++++++++++++++++++++++++++ MACHINE LEARNING ++++++++++++++++++++++++++++++++++++++++++++++++++
             # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
