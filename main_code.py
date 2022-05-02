@@ -10,42 +10,42 @@ pd.set_option('display.max_columns', 100)
 st.set_page_config(layout="wide")
 
 l10n_fr = {
-    'l10n_lang': 'Français (French)',
-    'l10n_selector': 'Sélectionnez une langue :',
-    'l10n_title': 'App de recommendation de films',
-    'l10n_define_film': "Écrivez le nom d'un film pour obtenir des recommendations",
-    'l10n_warning_num_letters': "Le titre du film que vous recherchez doit comporter au moins 3 lettres",
-    'l10n_warning_no_film': "Aucun film ne correspond à votre recherche, veuillez en choisir un autre.",
-    'l10n_saga_lotr_fullname': 'Seigneur des anneaux',
-    'l10n_found_films': "Les films suivants ressortent d'après votre recherche :",
-    'l10n_choose_index_saga': "Choissisez l'index du film souhaité pour la saga « {} » :",
-    'l10n_choose_index_normal': "Pour le sélectionner écrivez 0, sinon écrivez l'index du film souhaité :",
-    'l10n_relevant_film': "Le film le plus pertinent semble être « {} » de {}.",
-    'l10n_warning_index_not_present': "Il semblerait que l'index {} ne soit pas dans la liste, veuillez sélectionner un index valide",
-    'l10n_selected_film': "Vous avez sélectionné le film : « {} »"
+    'lang': 'Français (French)',
+    'selector': 'Sélectionnez une langue :',
+    'title': 'App de recommendation de films',
+    'define_film': "Écrivez le nom d'un film pour obtenir des recommendations",
+    'warning_num_letters': "Le titre du film que vous recherchez doit comporter au moins 3 lettres",
+    'warning_no_film': "Aucun film ne correspond à votre recherche, veuillez en choisir un autre.",
+    'saga_lotr_fullname': 'Seigneur des anneaux',
+    'found_films': "Les films suivants ressortent d'après votre recherche :",
+    'choose_index_saga': "Choissisez l'index du film souhaité pour la saga « {} » :",
+    'choose_index_normal': "Pour le sélectionner écrivez 0, sinon écrivez l'index du film souhaité :",
+    'relevant_film': "Le film le plus pertinent semble être « {} » de {}.",
+    'warning_index_not_present': "Il semblerait que l'index {} ne soit pas dans la liste, veuillez sélectionner un index valide",
+    'selected_film': "Vous avez sélectionné le film : « {} »"
 }
 
 l10n_en = {
-    'l10n_lang': 'English',
-    'l10n_selector': 'Select a language:',
-    'l10n_title': 'Films Recommendation App',
-    'l10n_define_film': 'Write the name of a film to get recommendations (Input must be a French Film name)',
-    'l10n_warning_num_letters': "The title of the film you're looking for must contain at least 3 letters",
-    'l10n_warning_no_film': "No films was found, please choose another one.",
-    'l10n_saga_lotr_fullname': 'Lord of the Rings',
-    'l10n_found_films': "The following films result from your search:",
-    'l10n_choose_index_saga': "Choose the wished film's index for the '{}' saga:",
-    'l10n_choose_index_normal': "In order to select it, write 0, otherwise write the number of the desired film:",
-    'l10n_relevant_film': "The most relevant seems to be '{}' from {}.",
-    'l10n_warning_index_not_present': "It seems that the index {} isn't in the list, please select a valid index",
-    'l10n_selected_film': "You have selected the film: '{}'"
+    'lang': 'English',
+    'selector': 'Select a language:',
+    'title': 'Films Recommendation App',
+    'define_film': 'Write the name of a film to get recommendations (Input must be a French Film name)',
+    'warning_num_letters': "The title of the film you're looking for must contain at least 3 letters",
+    'warning_no_film': "No films was found, please choose another one.",
+    'saga_lotr_fullname': 'Lord of the Rings',
+    'found_films': "The following films result from your search:",
+    'choose_index_saga': "Choose the wished film's index for the '{}' saga:",
+    'choose_index_normal': "In order to select it, write 0, otherwise write the number of the desired film:",
+    'relevant_film': "The most relevant seems to be '{}' from {}.",
+    'warning_index_not_present': "It seems that the index {} isn't in the list, please select a valid index",
+    'selected_film': "You have selected the film: '{}'"
 }
 
 
-lang_selector = st.sidebar.selectbox('', (l10n_fr['l10n_lang'], l10n_en['l10n_lang']))
+lang_selector = st.sidebar.selectbox('', (l10n_fr['lang'], l10n_en['lang']))
 
 # Système de localization et l10n implémentés après fin du projet par Axel Simond
-if lang_selector == l10n_fr['l10n_lang']:
+if lang_selector == l10n_fr['lang']:
     l10n = l10n_fr
 else:
     st.warning('''The database only has French names for the moment; English names are planned to be added soon enough.''')
@@ -54,7 +54,7 @@ else:
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # ++++++++++++++++++++++++++++++++++++++++++++ THE APP STARTS HERE ++++++++++++++++++++++++++++++++++++++++++++
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-st.title(l10n['l10n_title'])
+st.title(l10n['title'])
 
 # "https://www.imdb.com/title/" + title_id + "/"
 
@@ -147,16 +147,16 @@ weights = df_weights.iloc[0].to_list()
 df_display_titles = df_display_final_x[['titleId', 'title', 'numVotes', 'startYear', 'multigenres']]
 
 # Demande un film à chercher
-film_title = unidecode(st.text_input(l10n['l10n_define_film'])).lower()
+film_title = unidecode(st.text_input(l10n['define_film'])).lower()
 
 # Condition si la demande fait moins de 3 lettres, repose la question
 if not film_title:
     st.write("")
 elif len(film_title) <= 2:
-    st.warning(l10n['l10n_warning_num_letters'])
+    st.warning(l10n['warning_num_letters'])
 else:
     is_custom_word = False
-    custom_words_dict = {'lotr': l10n['l10n_saga_lotr_fullname'],
+    custom_words_dict = {'lotr': l10n['saga_lotr_fullname'],
                          'star wars': 'Star Wars',
                          'harry potter': 'Harry Potter',
                          'indiana jones': 'Indiana Jones'}
@@ -176,7 +176,7 @@ else:
     # Si au moins un film correspond à la recherche
 
     if not len(df_display_titles) > 0:
-        st.warning(l10n['l10n_warning_no_film'])
+        st.warning(l10n['warning_no_film'])
     else:
 
         # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -189,28 +189,28 @@ else:
 
         # condition si plusieurs films ont le même nom
         else:
-            st.write(l10n['l10n_found_films'])
+            st.write(l10n['found_films'])
 
             # condition pour la recherche par saga
             if is_custom_word:
                 df_display_titles = df_display_titles.sort_values(by=['startYear', 'title']).reset_index()
                 st.dataframe(df_display_titles[['startYear', 'title']])
-                text_index_input = l10n['l10n_choose_index_saga'].format(cleaned_name)
+                text_index_input = l10n['choose_index_saga'].format(cleaned_name)
 
             # condition pour la recherche standard
             else:
                 df_display_titles = df_display_titles.sort_values(by='numVotes', ascending=False).reset_index()
                 st.dataframe(df_display_titles[['startYear', 'title', 'multigenres']])
                 first_film = df_display_titles.iloc[0]
-                text_index_input = l10n['l10n_choose_index_normal']
-                st.write(l10n['l10n_relevant_film'].format(first_film.title, first_film.startYear))
+                text_index_input = l10n['choose_index_normal']
+                st.write(l10n['relevant_film'].format(first_film.title, first_film.startYear))
 
             selected_film = st.text_input(text_index_input)
 
             if selected_film:
                 # condition si l'index n'est pas dans la liste
                 if int(selected_film) not in list(range(len(df_display_titles))):
-                    st.warning(l10n['l10n_warning_index_not_present'].format(str(selected_film)))
+                    st.warning(l10n['warning_index_not_present'].format(str(selected_film)))
                 else:
                     film_index = df_display_titles.index[int(selected_film)]
             else:
@@ -225,7 +225,7 @@ else:
             # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
             # ++++++++++++++++++++++++++++++++++++++++++++++++++ MACHINE LEARNING ++++++++++++++++++++++++++++++++++++++++++++++++++
             # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-            st.write(l10n['l10n_selected_film'].format(df_display_titles.iloc[film_index, :].title))
+            st.write(l10n['selected_film'].format(df_display_titles.iloc[film_index, :].title))
             film_id = df_display_titles.iloc[film_index, :].titleId
             selected_film = df_display_final_x[df_display_final_x['titleId'] == film_id].iloc[:1]
 
