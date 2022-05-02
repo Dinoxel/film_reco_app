@@ -20,7 +20,6 @@ l10n_fr = {
     'found_films': "Les films suivants ressortent d'après votre recherche :",
     'relevant_film': "Le film le plus pertinent semble être « {} » de {}.",
     'film_selector': 'Sélectionner le film voulue dans la liste (par défaut : {} ({})).',
-    'selected_film': "Vous avez sélectionné le film : « {} »",
     "genre_title": "Titre",
     "genre_startYear": "Année",
     "genre_multigenres": "Genres",
@@ -41,7 +40,6 @@ l10n_en = {
     'found_films': "The following films result from your search:",
     'relevant_film': "The most relevant seems to be '{}' from {}.",
     'film_selector': 'Select the desired film in the list (default: {} ({})).',
-    'selected_film': "You have selected the film: '{}'",
     "genre_title": "Title",
     "genre_startYear": "Year",
     "genre_multigenres": "Genres",
@@ -246,7 +244,6 @@ else:
             # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
             # ++++++++++++++++++++++++++++++++++++++++++++++++++ MACHINE LEARNING ++++++++++++++++++++++++++++++++++++++++++++++++++
             # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-            st.write(l10n['selected_film'].format(df_display_titles.iloc[film_index, :].title))
             film_id = df_display_titles.iloc[film_index, :].titleId
             selected_film = df_display_final_x[df_display_final_x['titleId'] == film_id].iloc[:1]
 
