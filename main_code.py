@@ -214,7 +214,6 @@ else:
     if not len(df_display_titles) > 0:
         st.warning(l10n['warning_no_movie'])
     else:
-
         # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         # ++++++++++++++++++++++++++++++++++++++++++++++++ INPUT INDEX ++++++++++++++++++++++++++++++++++++++++++++++++
         # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -222,6 +221,9 @@ else:
         # condition si un seul film est présent après recherche
         if len(df_display_titles) == 1:
             movie_index = 0
+
+            first_movie = df_display_titles.iloc[0]
+            st.write(l10n['relevant_movie'].format(first_movie.title, first_movie.startYear))
 
         # condition si plusieurs films ont le même nom
         else:
