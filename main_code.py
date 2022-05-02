@@ -217,10 +217,11 @@ else:
         # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         # ++++++++++++++++++++++++++++++++++++++++++++++++ INPUT INDEX ++++++++++++++++++++++++++++++++++++++++++++++++
         # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        movie_index = 123456789
+        found_movie = False
         # condition si un seul film est présent après recherche
         if len(df_display_titles) == 1:
             movie_index = 0
+            found_movie = True
 
             first_movie = df_display_titles.iloc[0]
             st.write(l10n['relevant_movie'].format(first_movie.title, first_movie.startYear))
@@ -254,12 +255,9 @@ else:
             )
 
             movie_index = df_titles_selector[df_titles_selector == movie_selection].index[0]
+            found_movie = True
 
-        # condition pour éviter au code de fonctionner si aucun paramètre n'a été rentré
-        # bidouillage
-        if movie_index == 123456789:
-            st.write('')
-        else:
+        if found_movie:
             max_movie_length = st.sidebar.radio(l10n["knn_selector"], (5, 10, 15, 20))
             max_movie_length += 1
             # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
