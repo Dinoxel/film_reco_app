@@ -7,6 +7,7 @@ import itertools
 
 pd.set_option('display.width', 7000000)
 pd.set_option('display.max_columns', 100)
+st.set_page_config(layout="wide")
 
 l10n_fr = {
     'l10n_lang': 'Français (French)',
@@ -60,7 +61,6 @@ st.title(l10n['l10n_title'])
 # Chargement de la base principale
 @st.cache
 def loading_dataframe():
-    st.set_page_config(layout="wide")
     # Cache la base de base
     df_full_final_x = pd.read_csv(
         'https://media.githubusercontent.com/media/Dinoxel/film_reco_app/master/Desktop/projets/projet_2/database_imdb/df_full_final_X.csv',
