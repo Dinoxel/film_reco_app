@@ -10,12 +10,7 @@ pd.set_option('display.max_columns', 100)
 st.set_page_config(
     page_title="Film Recommendation App",
     page_icon="🎞️",
-    layout="wide",
-    menu_items={
-        'Get Help': 'https://www.extremelycoolapp.com/help',
-        'Report a bug': "https://www.extremelycoolapp.com/bug",
-        'About': "# This is a header. This is an *extremely* cool app!"
-    }
+    layout="wide"
 )
 
 l10n_fr = {
