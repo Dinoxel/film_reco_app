@@ -240,9 +240,6 @@ else:
                     metric_params={"w": weights},
                     metric="wminkowski"
                 ).fit(X)
-                st.write(df_knn_final_x[df_knn_final_x['titleId'] == film_id].iloc[:1, 2:])
-                st.write(df_knn_final_x[df_knn_final_x['titleId'] == film_id])
-                st.write(model_nn.kneighbors(df_knn_final_x[df_knn_final_x['titleId'] == film_id].iloc[:1, 2:]))
 
                 selected_films_index = \
                     model_nn.kneighbors(df_knn_final_x[df_knn_final_x['titleId'] == film_id].iloc[:1, 2:])[1][0][1:]
