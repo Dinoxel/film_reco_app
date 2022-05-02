@@ -207,25 +207,14 @@ else:
                 text_index_input = l10n['choose_index_normal']
                 st.write(l10n['relevant_film'].format(first_film.title, first_film.startYear))
 
-            selected_film = st.text_input(text_index_input)
+            df_titles_selector = df_display_titles["title"] + " (" + df_display_titles["startYear"].astype(str) + ")"
 
-            if selected_film:
-                # condition si l'index n'est pas dans la liste
-                if not selected_film.isalnum():
-                    st.warning(l10n['warning_letter_instead_of_index'])
-                elif int(selected_film) not in list(range(len(df_display_titles))):
-                    st.warning(l10n['warning_index_not_present'].format(str(selected_film)))
-                else:
-                    df_titles_selector = df_display_titles["title"] + " (" + df_display_titles["startYear"].astype(str) + ")"
+            film_selection = st.selectbox(
+                'Sélectionner le film voulue dans la liste (par défaut {} ({})).'.format(first_film.title,first_film.startYear),
+                df_titles_selector.to_list())
 
-                    film_selection = st.selectbox(
-                        'Sélectionner le film voulue dans la liste (par défaut {} ({})).'.format(first_film.title, first_film.startYear),
-                        df_titles_selector.to_list())
+            film_index = df_titles_selector[df_titles_selector == film_selection].index[0]
 
-                    film_index = df_titles_selector[df_titles_selector == film_selection].index
-
-            if not selected_film:
-                st.write("")
 
         # condition pour éviter au code de fonctionner si aucun paramètre n'a été rentré
         # bidouillage
