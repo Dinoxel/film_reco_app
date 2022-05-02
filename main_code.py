@@ -15,16 +15,17 @@ st.set_page_config(
 
 l10n_fr = {
     'lang': 'Français (French)',
+    'polished_search': 'Affiner votre recherche pour trouver moins de films.',
     'knn_selector': "Nombres de films à afficher :",
     'selector': 'Sélectionnez une langue :',
     'title': 'App de recommendation de films',
-    'define_film': "Écrivez le nom d'un film pour obtenir des recommendations",
+    'define_movie': "Écrivez le nom d'un film pour obtenir des recommendations",
     'warning_num_letters': "Le titre du film que vous recherchez doit comporter au moins 3 lettres",
-    'warning_no_film': "Aucun film ne correspond à votre recherche, veuillez en choisir un autre.",
+    'warning_no_movie': "Aucun film ne correspond à votre recherche, veuillez en choisir un autre.",
     'saga_lotr_fullname': 'Seigneur des anneaux',
-    'found_films': "Les films suivants ressortent d'après votre recherche :",
-    'relevant_film': "Le film le plus pertinent semble être « {} » de {}.",
-    'film_selector': 'Sélectionner le film voulue dans la liste suivante. Défaut : {} ({}).',
+    'found_movies': "Les films suivants ressortent d'après votre recherche :",
+    'relevant_movie': "Le film le plus pertinent semble être « {} » de {}.",
+    'movie_selector': 'Sélectionner le film voulue dans la liste suivante. Défaut : {} ({}).',
     "genre_title": "Titre",
     "genre_startYear": "Année",
     "genre_multigenres": "Genres",
@@ -36,16 +37,17 @@ l10n_fr = {
 
 l10n_en = {
     'lang': 'English',
-    'knn_selector': "Number of films to display:",
+    'polished_search': 'Refine your search to find fewer movies.',
+    'knn_selector': "Number of movies to display:",
     'selector': 'Select a language:',
-    'title': 'Films Recommendation App',
-    'define_film': 'Write the name of a film to get recommendations (Input must be a French Film name)',
-    'warning_num_letters': "The title of the film you're looking for must contain at least 3 letters",
-    'warning_no_film': "No films was found, please choose another one.",
+    'title': 'Movies Recommendation App',
+    'define_movie': 'Write the name of a movie to get recommendations (Input must be a French movie name)',
+    'warning_num_letters': "The title of the movie you're looking for must contain at least 3 letters",
+    'warning_no_movie': "No movies was found, please choose another one.",
     'saga_lotr_fullname': 'Lord of the Rings',
-    'found_films': "The following films result from your search:",
-    'relevant_film': "The most relevant seems to be '{}' from {}.",
-    'film_selector': 'Select the desired film in the following list. Default: {} ({}).',
+    'found_movies': "The following movies result from your search:",
+    'relevant_movie': "The most relevant seems to be '{}' from {}.",
+    'movie_selector': 'Select the desired movie in the following list. Default: {} ({}).',
     "genre_title": "Title",
     "genre_startYear": "Year",
     "genre_multigenres": "Genres",
@@ -183,12 +185,12 @@ weights = df_weights.iloc[0].to_list()
 df_display_titles = df_display_final_x[['titleId', 'title', 'numVotes', 'startYear', 'multigenres']]
 
 # Demande un film à chercher
-film_title = unidecode(st.text_input(l10n['define_film'])).lower()
+movie_title = unidecode(st.text_input(l10n['define_movie'])).lower()
 
 # Condition si la demande fait moins de 3 lettres, repose la question
-if not film_title:
+if not movie_title:
     st.write("")
-elif len(film_title) <= 2:
+elif len(movie_title) <= 2:
     st.warning(l10n['warning_num_letters'])
 else:
     is_custom_word = False
@@ -197,70 +199,72 @@ else:
                          'harry potter': 'Harry Potter',
                          'indiana jones': 'Indiana Jones'}
 
-    # Condition pour les noms de saga, modifie 'film_title' pour la recherche
+    # Condition pour les noms de saga, modifie 'movie_title' pour la recherche
     for acronym, saga_name in custom_words_dict.items():
-        if film_title == acronym:
+        if movie_title == acronym:
             cleaned_name = saga_name  # Nécessaire pour afficher le nom de la saga plus loin
-            film_title = unidecode(saga_name).lower()
+            movie_title = unidecode(saga_name).lower()
             is_custom_word = True
             break
 
     # Recherche le film demandé dans la base de données
-    df_display_titles = df_display_titles[df_display_titles['title'].apply(lambda x: unidecode(x.lower())).str.contains(film_title)]
+    df_display_titles = df_display_titles[df_display_titles['title'].apply(lambda x: unidecode(x.lower())).str.contains(movie_title)]
 
     # Si au moins un film correspond à la recherche
     if not len(df_display_titles) > 0:
-        st.warning(l10n['warning_no_film'])
+        st.warning(l10n['warning_no_movie'])
     else:
 
         # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         # ++++++++++++++++++++++++++++++++++++++++++++++++ INPUT INDEX ++++++++++++++++++++++++++++++++++++++++++++++++
         # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        film_index = 123456789
+        movie_index = 123456789
         # condition si un seul film est présent après recherche
         if len(df_display_titles) == 1:
-            film_index = 0
+            movie_index = 0
 
         # condition si plusieurs films ont le même nom
         else:
-            st.write(l10n['found_films'])
+            if len(df_display_titles) > 13:
+                st.info(l10n["polished_search"])
+            st.write(l10n['found_movies'])
 
             # condition pour la recherche par saga
             if is_custom_word:
                 df_display_titles = df_display_titles.sort_values(by=['startYear', 'title']).reset_index()
                 st.dataframe(df_prettifier(df_display_titles[['startYear', 'title', 'multigenres']]))
 
-                first_film = df_display_titles.iloc[0]
+                first_movie = df_display_titles.iloc[0]
 
             # condition pour la recherche standard
             else:
                 df_display_titles = df_display_titles.sort_values(by='numVotes', ascending=False).reset_index()
                 st.dataframe(df_prettifier(df_display_titles[['startYear', 'title', 'multigenres']]))
 
-                first_film = df_display_titles.iloc[0]
-                st.write(l10n['relevant_film'].format(first_film.title, first_film.startYear))
+                first_movie = df_display_titles.iloc[0]
+                st.write(l10n['relevant_movie'].format(first_movie.title, first_movie.startYear))
 
             df_titles_selector = df_display_titles["title"] + " (" + df_display_titles["startYear"].astype(str) + ")"
 
-            film_selection = st.selectbox(
-                l10n["film_selector"].format(first_film.title, first_film.startYear),
+            movie_selection = st.selectbox(
+                l10n["movie_selector"].format(first_movie.title, first_movie.startYear),
                 df_titles_selector.to_list()
             )
 
-            film_index = df_titles_selector[df_titles_selector == film_selection].index[0]
+            movie_index = df_titles_selector[df_titles_selector == movie_selection].index[0]
 
         # condition pour éviter au code de fonctionner si aucun paramètre n'a été rentré
         # bidouillage
-        if film_index == 123456789:
+        if movie_index == 123456789:
             st.write('')
         else:
-            max_film_length = st.sidebar.radio(l10n["knn_selector"], (5, 10, 15, 20))
-            max_film_length += 1
+            max_movie_length = st.sidebar.radio(l10n["knn_selector"], (5, 10, 15, 20))
+            max_movie_length += 1
             # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
             # ++++++++++++++++++++++++++++++++++++++++++++++++++ MACHINE LEARNING ++++++++++++++++++++++++++++++++++++++++++++++++++
             # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-            film_id = df_display_titles.iloc[film_index, :].titleId
-            selected_film = df_display_final_x[df_display_final_x['titleId'] == film_id].iloc[:1]
+            movie_id = df_display_titles.iloc[movie_index, :].titleId
+            selected_movie = df_display_final_x[df_display_final_x['titleId'] == movie_id].iloc[:1]
 
             # Définit des infos pour le ML
             X = df_knn_final_x.iloc[:, 2:]
@@ -275,33 +279,33 @@ else:
                     metric="wminkowski"
                 ).fit(X)
 
-                selected_films_index = \
-                    model_nn.kneighbors(df_knn_final_x[df_knn_final_x['titleId'] == film_id].iloc[:1, 2:])[1][0][1:]
+                selected_movies_index = \
+                    model_nn.kneighbors(df_knn_final_x[df_knn_final_x['titleId'] == movie_id].iloc[:1, 2:])[1][0][1:]
 
                 # Augmente les voisins n si le film est présent dans la liste de recommendation
                 # Bidouillage
-                if len([df_knn_final_x.iloc[x, 0] for x in selected_films_index if x != film_id]) != max_film_length:
+                if len([df_knn_final_x.iloc[x, 0] for x in selected_movies_index if x != movie_id]) != max_movie_length:
                     n_neighbors_num += 1
                 else:
                     break
 
             # Si le film est présent, le supprime des films à afficher
-            selected_films_index = selected_films_index.tolist()
-            if selected_film.index.to_list()[0] in selected_films_index:
-                selected_films_index.remove(selected_film.index.to_list()[0])
+            selected_movies_index = selected_movies_index.tolist()
+            if selected_movie.index.to_list()[0] in selected_movies_index:
+                selected_movies_index.remove(selected_movie.index.to_list()[0])
             else:
-                selected_films_index = selected_films_index[:-1]
+                selected_movies_index = selected_movies_index[:-1]
 
             # Concatène les films prédits
-            predicted_films = pd.DataFrame()
-            for film_index in selected_films_index:
-                predicted_films = pd.concat([predicted_films, df_display_final_x.iloc[[film_index]]], ignore_index=True)
+            predicted_movies = pd.DataFrame()
+            for movie_index in selected_movies_index:
+                predicted_movies = pd.concat([predicted_movies, df_display_final_x.iloc[[movie_index]]], ignore_index=True)
 
             # Affiche le filmé sélectionné
-            st.dataframe(df_prettifier(selected_film[selected_film.columns[1:]], final=True))
+            st.dataframe(df_prettifier(selected_movie[selected_movie.columns[1:]], final=True))
 
             # Affiche la recommendation de films
-            st.dataframe(df_prettifier(predicted_films[predicted_films.columns[1:]], final=True))
+            st.dataframe(df_prettifier(predicted_movies[predicted_movies.columns[1:]], final=True))
 
             # get_html_title_page('0110912')
             # print(predicted_films)
