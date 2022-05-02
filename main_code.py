@@ -216,6 +216,15 @@ else:
                 elif int(selected_film) not in list(range(len(df_display_titles))):
                     st.warning(l10n['warning_index_not_present'].format(str(selected_film)))
                 else:
+                    df_titles_selector = df_display_titles["title"] + " (" + df_display_titles["startYear"].astype(str) + ")"
+
+                    film_selection = st.selectbox(
+                        'Sélectionner le film',
+                        [''] + df_titles_selector.to_list())
+                    if film_selection:
+                        st.write('')
+
+
                     film_index = df_display_titles.index[int(selected_film)]
             else:
                 st.write("")
