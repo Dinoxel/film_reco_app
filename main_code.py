@@ -223,14 +223,14 @@ else:
             # condition pour la recherche par saga
             if is_custom_word:
                 df_display_titles = df_display_titles.sort_values(by=['startYear', 'title']).reset_index()
-                st.dataframe(df_prettifier(df_display_titles))
+                st.dataframe(df_prettifier(df_display_titles[['startYear', 'title', 'multigenres']]))
 
                 first_film = df_display_titles.iloc[0]
 
             # condition pour la recherche standard
             else:
                 df_display_titles = df_display_titles.sort_values(by='numVotes', ascending=False).reset_index()
-                st.dataframe(df_prettifier(df_display_titles))
+                st.dataframe(df_prettifier(df_display_titles[['startYear', 'title', 'multigenres']]))
 
                 first_film = df_display_titles.iloc[0]
                 st.write(l10n['relevant_film'].format(first_film.title, first_film.startYear))
