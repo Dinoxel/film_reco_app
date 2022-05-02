@@ -11,7 +11,7 @@ st.set_page_config(layout="wide")
 
 l10n_fr = {
     'lang': 'Français (French)',
-    'knn_selector': "Nombres de films ?",
+    'knn_selector': "Nombres de films à afficher :",
     'selector': 'Sélectionnez une langue :',
     'title': 'App de recommendation de films',
     'define_film': "Écrivez le nom d'un film pour obtenir des recommendations",
@@ -32,7 +32,7 @@ l10n_fr = {
 
 l10n_en = {
     'lang': 'English',
-    'knn_selector': "Number of films?",
+    'knn_selector': "Number of films to display:",
     'selector': 'Select a language:',
     'title': 'Films Recommendation App',
     'define_film': 'Write the name of a film to get recommendations (Input must be a French Film name)',
@@ -59,9 +59,6 @@ if lang_selector == l10n_fr['lang']:
 else:
     st.warning('''The database only has French names for the moment; English names are planned to be added soon enough.''')
     l10n = l10n_en
-
-knn_selector = st.sidebar.select_slider(l10n["knn_selector"], (6, 11, 16, 21))
-
 
 def df_prettifier(df, final=False):
     df["multigenres"] = df["multigenres"].apply(lambda row: row.replace(",", ", "))
@@ -253,6 +250,7 @@ else:
         if film_index == 123456789:
             st.write('')
         else:
+            max_film_length = st.sidebar.radio(l10n["knn_selector"], (6, 11, 16, 21))
             # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
             # ++++++++++++++++++++++++++++++++++++++++++++++++++ MACHINE LEARNING ++++++++++++++++++++++++++++++++++++++++++++++++++
             # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -262,7 +260,7 @@ else:
             # Définit des infos pour le ML
             X = df_knn_final_x.iloc[:, 2:]
             weights = df_weights.iloc[0].to_list()
-            n_neighbors_num = max_film_length = 6
+            n_neighbors_num = 6
 
             # MACHINE LEARNING
             while True:
