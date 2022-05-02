@@ -58,6 +58,29 @@ else:
     st.warning('''The database only has French names for the moment; English names are planned to be added soon enough.''')
     l10n = l10n_en
 
+
+def df_prettifier(df, final=False):
+    df["multigenres"] = df["multigenres"].apply(lambda row: row.replace(",", ", "))
+    df = df.rename(
+        columns={
+            'startYear': l10n['genre_startYear'],
+            'title': l10n['genre_title'],
+            'multigenres': l10n['genre_multigenres']
+        }
+    )
+
+    if final:
+        df = df.rename(
+            columns={
+                'runtimeMinutes': l10n['genre_runtimeMinutes'],
+                'averageRating': l10n['genre_averageRating'],
+                'numVotes': l10n['genre_numVotes'],
+                'nconst': l10n['genre_nconst']
+            }
+        )
+
+    return df
+
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # ++++++++++++++++++++++++++++++++++++++++++++ THE APP STARTS HERE ++++++++++++++++++++++++++++++++++++++++++++
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -197,19 +220,6 @@ else:
         else:
             st.write(l10n['found_films'])
 
-            def df_prettifier(original_df):
-                df_display_tweaks = original_df[['startYear', 'title', 'multigenres']]
-                df_display_tweaks["multigenres"] = df_display_tweaks["multigenres"].apply(lambda row: row.replace(",", ", "))
-                df_display_tweaks = df_display_tweaks.rename(
-                    columns={
-                        'startYear': l10n['genre_startYear'],
-                        'title': l10n['genre_title'],
-                        'multigenres': l10n['genre_multigenres']
-                    }
-                )
-
-                return df_display_tweaks
-
             # condition pour la recherche par saga
             if is_custom_word:
                 df_display_titles = df_display_titles.sort_values(by=['startYear', 'title']).reset_index()
@@ -282,10 +292,10 @@ else:
                 predicted_films = pd.concat([predicted_films, df_display_final_x.iloc[[film_index]]], ignore_index=True)
 
             # Affiche le filmé sélectionné
-            st.dataframe(selected_film[1:])
+            st.dataframe(df_prettifier(selected_film.loc[:, 1:]), final=True)
 
             # Affiche la recommendation de films
-            st.dataframe(predicted_films[1:])
+            st.dataframe(df_prettifier(predicted_films.loc[:, 1:]), final=True)
 
             # get_html_title_page('0110912')
             # print(predicted_films)
