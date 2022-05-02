@@ -211,10 +211,10 @@ else:
 
             if selected_film:
                 # condition si l'index n'est pas dans la liste
-                if int(selected_film) not in list(range(len(df_display_titles))):
-                    st.warning(l10n['warning_index_not_present'].format(str(selected_film)))
-                elif not selected_film.isalnum():
+                if not selected_film.isalnum():
                     st.warning(l10n['warning_letter_instead_of_index'])
+                elif int(selected_film) not in list(range(len(df_display_titles))):
+                    st.warning(l10n['warning_index_not_present'].format(str(selected_film)))
                 else:
                     film_index = df_display_titles.index[int(selected_film)]
             else:
