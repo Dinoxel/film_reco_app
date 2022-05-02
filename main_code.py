@@ -89,7 +89,7 @@ df_display_final_x, df_knn_final_x = loading_dataframe()
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # ++++++++++++++++++++++++++++++++++++++++++++++++++ WEIGHTS ++++++++++++++++++++++++++++++++++++++++++++++++++
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# Selectionne toutes les colonnes booléennes
+# Sélectionne toutes les colonnes booléennes
 X = df_knn_final_x.iloc[:, 2:].columns
 
 # Définit le poids de base pour toutes les colonnes sur 1
@@ -133,6 +133,7 @@ for real in df_weights.loc[:, 'nm0000229':'year <= 1960']:
 # ======================== Acteurs ========================
 for actor in df_weights.loc[:, 'year >= 1990':'nm9654612']:
     df_weights[actor] = weight_all_actors
+
 # ======================== Années ========================
 for year in df_weights.loc[:, 'year <= 1960':'year >= 1990']:
     df_weights[year] = weight_years
@@ -176,7 +177,6 @@ else:
         df_display_titles['title'].apply(lambda x: unidecode(x.lower())).str.contains(film_title)]
 
     # Si au moins un film correspond à la recherche
-
     if not len(df_display_titles) > 0:
         st.warning(l10n['warning_no_film'])
     else:
