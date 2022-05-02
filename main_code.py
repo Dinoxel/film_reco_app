@@ -219,14 +219,12 @@ else:
                     df_titles_selector = df_display_titles["title"] + " (" + df_display_titles["startYear"].astype(str) + ")"
 
                     film_selection = st.selectbox(
-                        'Sélectionner le film',
-                        [''] + df_titles_selector.to_list())
-                    if film_selection:
-                        st.write('')
+                        'Sélectionner le film voulue dans la liste (par défaut {} ({})).'.format(first_film.title, first_film.startYear),
+                        df_titles_selector.to_list())
 
+                    film_index = df_titles_selector[df_titles_selector == film_selection].index
 
-                    film_index = df_display_titles.index[int(selected_film)]
-            else:
+            if not selected_film:
                 st.write("")
 
         # condition pour éviter au code de fonctionner si aucun paramètre n'a été rentré
