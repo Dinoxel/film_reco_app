@@ -19,12 +19,12 @@ l10n_fr = {
     'saga_lotr_fullname': 'Seigneur des anneaux',
     'found_films': "Les films suivants ressortent d'après votre recherche :",
     'relevant_film': "Le film le plus pertinent semble être « {} » de {}.",
-    'film_selector': 'Sélectionner le film voulue dans la liste (par défaut : {} ({})).',
+    'film_selector': 'Sélectionner le film voulue dans la liste suivante. Défaut : {} ({}).',
     "genre_title": "Titre",
     "genre_startYear": "Année",
     "genre_multigenres": "Genres",
     "genre_runtimeMinutes": "Durée (minutes)",
-    "genre_averageRating": "Note moyenne",
+    "genre_averageRating": "Note (moyenne)",
     "genre_numVotes": "Nombre de votes",
     "genre_nconst": "Acteurs"
 }
@@ -39,13 +39,13 @@ l10n_en = {
     'saga_lotr_fullname': 'Lord of the Rings',
     'found_films': "The following films result from your search:",
     'relevant_film': "The most relevant seems to be '{}' from {}.",
-    'film_selector': 'Select the desired film in the list (default: {} ({})).',
+    'film_selector': 'Select the desired film in the following list. Default: {} ({}).',
     "genre_title": "Title",
     "genre_startYear": "Year",
     "genre_multigenres": "Genres",
     "genre_runtimeMinutes": "Time (minutes)",
-    "genre_averageRating": "Average Rating",
-    "genre_numVotes": "Votes Number",
+    "genre_averageRating": "Rating (average)",
+    "genre_numVotes": "Num. of Votes",
     "genre_nconst": "Actors"
 }
 
@@ -202,7 +202,7 @@ else:
 
     # Recherche le film demandé dans la base de données
     df_display_titles = df_display_titles[df_display_titles['title'].apply(lambda x: unidecode(x.lower())).str.contains(film_title)]
-    st.write(df_display_titles)
+
     # Si au moins un film correspond à la recherche
     if not len(df_display_titles) > 0:
         st.warning(l10n['warning_no_film'])
@@ -243,7 +243,6 @@ else:
             )
 
             film_index = df_titles_selector[df_titles_selector == film_selection].index[0]
-
 
         # condition pour éviter au code de fonctionner si aucun paramètre n'a été rentré
         # bidouillage
