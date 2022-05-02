@@ -11,6 +11,7 @@ st.set_page_config(layout="wide")
 
 l10n_fr = {
     'lang': 'Français (French)',
+    'knn_selector': "Nombres de films ?",
     'selector': 'Sélectionnez une langue :',
     'title': 'App de recommendation de films',
     'define_film': "Écrivez le nom d'un film pour obtenir des recommendations",
@@ -31,6 +32,7 @@ l10n_fr = {
 
 l10n_en = {
     'lang': 'English',
+    'knn_selector': "Number of films?",
     'selector': 'Select a language:',
     'title': 'Films Recommendation App',
     'define_film': 'Write the name of a film to get recommendations (Input must be a French Film name)',
@@ -57,6 +59,8 @@ if lang_selector == l10n_fr['lang']:
 else:
     st.warning('''The database only has French names for the moment; English names are planned to be added soon enough.''')
     l10n = l10n_en
+
+knn_selector = st.sidebar.select_slider(l10n["knn_selector"], (6, 11, 16, 21))
 
 
 def df_prettifier(df, final=False):
