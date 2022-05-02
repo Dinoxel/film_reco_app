@@ -18,11 +18,16 @@ l10n_fr = {
     'warning_no_film': "Aucun film ne correspond à votre recherche, veuillez en choisir un autre.",
     'saga_lotr_fullname': 'Seigneur des anneaux',
     'found_films': "Les films suivants ressortent d'après votre recherche :",
-    'choose_index_saga': "Choisissez l'index du film souhaité pour la saga « {} » :",
-    'choose_index_normal': "Pour le sélectionner écrivez 0, sinon écrivez l'index du film souhaité :",
     'relevant_film': "Le film le plus pertinent semble être « {} » de {}.",
     'film_selector': 'Sélectionner le film voulue dans la liste (par défaut : {} ({})).',
-    'selected_film': "Vous avez sélectionné le film : « {} »"
+    'selected_film': "Vous avez sélectionné le film : « {} »",
+    "genre_title": "Titre",
+    "genre_startYear": "Année",
+    "genre_multigenres": "Genres",
+    "genre_runtimeMinutes": "Durée (minutes)",
+    "genre_averageRating": "Note moyenne",
+    "genre_numVotes": "Nombre de votes",
+    "genre_nconst": "Acteurs"
 }
 
 l10n_en = {
@@ -34,11 +39,16 @@ l10n_en = {
     'warning_no_film': "No films was found, please choose another one.",
     'saga_lotr_fullname': 'Lord of the Rings',
     'found_films': "The following films result from your search:",
-    'choose_index_saga': "Choose the wished film's index for the '{}' saga:",
-    'choose_index_normal': "In order to select it, write 0, otherwise write the number of the desired film:",
     'relevant_film': "The most relevant seems to be '{}' from {}.",
     'film_selector': 'Select the desired film in the list (default: {} ({})).',
-    'selected_film': "You have selected the film: '{}'"
+    'selected_film': "You have selected the film: '{}'",
+    "genre_title": "Title",
+    "genre_startYear": "Year",
+    "genre_multigenres": "Genres",
+    "genre_runtimeMinutes": "Time (minutes)",
+    "genre_averageRating": "Average Rating",
+    "genre_numVotes": "Votes Number",
+    "genre_nconst": "Actors"
 }
 
 
@@ -195,14 +205,24 @@ else:
             if is_custom_word:
                 df_display_titles = df_display_titles.sort_values(by=['startYear', 'title']).reset_index()
                 st.dataframe(df_display_titles[['startYear', 'title']])
-                text_index_input = l10n['choose_index_saga'].format(cleaned_name)
 
             # condition pour la recherche standard
             else:
                 df_display_titles = df_display_titles.sort_values(by='numVotes', ascending=False).reset_index()
-                st.dataframe(df_display_titles[['startYear', 'title', 'multigenres']])
+
+                df_display_tweaks = df_display_titles[['startYear', 'title', 'multigenres']].copy()
+                df_display_tweaks.rename(
+                    columns={
+                        'startYear': l10n['genre_startYear'],
+                        'title': l10n['genre_title'],
+                        'multigenres': l10n['genre_multigenres']
+                    }
+                )
+
+
+
+                st.dataframe(df_display_tweaks)
                 first_film = df_display_titles.iloc[0]
-                text_index_input = l10n['choose_index_normal']
                 st.write(l10n['relevant_film'].format(first_film.title, first_film.startYear))
 
             df_titles_selector = df_display_titles["title"] + " (" + df_display_titles["startYear"].astype(str) + ")"
@@ -264,10 +284,10 @@ else:
                 predicted_films = pd.concat([predicted_films, df_display_final_x.iloc[[film_index]]], ignore_index=True)
 
             # Affiche le filmé sélectionné
-            st.dataframe(selected_film)
+            st.dataframe(selected_film[1:])
 
             # Affiche la recommendation de films
-            st.dataframe(predicted_films)
+            st.dataframe(predicted_films[1:])
 
             # get_html_title_page('0110912')
             # print(predicted_films)
