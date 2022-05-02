@@ -51,7 +51,6 @@ l10n_en = {
     "genre_nconst": "Actors"
 }
 
-
 lang_selector = st.sidebar.selectbox('', (l10n_fr['lang'], l10n_en['lang']))
 
 # Système de localization et l10n implémentés après fin du projet par Axel Simond
@@ -201,17 +200,10 @@ else:
         else:
             st.write(l10n['found_films'])
 
-            # condition pour la recherche par saga
-            if is_custom_word:
-                df_display_titles = df_display_titles.sort_values(by=['startYear', 'title']).reset_index()
-                st.dataframe(df_display_titles[['startYear', 'title']])
-
-            # condition pour la recherche standard
-            else:
-                df_display_titles = df_display_titles.sort_values(by='numVotes', ascending=False).reset_index()
-
-                df_display_tweaks = df_display_titles[['startYear', 'title', 'multigenres']].copy()
-                df_display_tweaks.rename(
+            def df_prettifier(original_df):
+                df_display_tweaks = original_df[['startYear', 'title', 'multigenres']]
+                df_display_tweaks["multigenres"] = df_display_tweaks["multigenres"].apply(lambda row: row.replace(",", ", "))
+                df_display_tweaks = df_display_tweaks.rename(
                     columns={
                         'startYear': l10n['genre_startYear'],
                         'title': l10n['genre_title'],
@@ -219,19 +211,29 @@ else:
                     }
                 )
 
+                return df_display_tweaks
 
+            # condition pour la recherche par saga
+            if is_custom_word:
+                df_display_titles = df_display_titles.sort_values(by=['startYear', 'title']).reset_index()
+                st.dataframe(df_prettifier(df_display_titles))
 
-                st.dataframe(df_display_tweaks)
+                first_film = df_display_titles.iloc[0]
+
+            # condition pour la recherche standard
+            else:
+                df_display_titles = df_display_titles.sort_values(by='numVotes', ascending=False).reset_index()
+                st.dataframe(df_prettifier(df_display_titles))
+
                 first_film = df_display_titles.iloc[0]
                 st.write(l10n['relevant_film'].format(first_film.title, first_film.startYear))
 
             df_titles_selector = df_display_titles["title"] + " (" + df_display_titles["startYear"].astype(str) + ")"
 
-
-
             film_selection = st.selectbox(
                 l10n["film_selector"].format(first_film.title, first_film.startYear),
-                df_titles_selector.to_list())
+                df_titles_selector.to_list()
+            )
 
             film_index = df_titles_selector[df_titles_selector == film_selection].index[0]
 
