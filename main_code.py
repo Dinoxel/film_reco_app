@@ -155,7 +155,7 @@ weights = df_weights.iloc[0].to_list()
 df_display_titles = df_display_final_x[['titleId', 'title', 'numVotes', 'startYear', 'multigenres']]
 
 # Demande un film à chercher
-film_title = unidecode(st.text_input(l10n['define_film'])).lower()
+film_title = unidecode(st.text_input(l10n['define_film'])).lower().replace("(", "9").replace(")", "9")
 
 # Condition si la demande fait moins de 3 lettres, repose la question
 if not film_title:
@@ -178,8 +178,9 @@ else:
             break
 
     # Recherche le film demandé dans la base de données
-    df_display_titles = df_display_titles[
-        df_display_titles['title'].apply(lambda x: unidecode(x.lower().replace("(", r"\(").replace(")", r"\)"))).str.contains(film_title)]
+    df_display_titles = df_display_titles[df_display_titles['title'].apply(lambda x: unidecode(x.lower())).str.contains(film_title)]
+
+
 
     # Si au moins un film correspond à la recherche
     if not len(df_display_titles) > 0:
