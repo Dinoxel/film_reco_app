@@ -179,7 +179,7 @@ else:
 
     # Recherche le film demandé dans la base de données
     df_display_titles = df_display_titles[
-        df_display_titles['title'].apply(lambda x: unidecode(x.lower())).str.contains(film_title)]
+        df_display_titles['title'].apply(lambda x: unidecode(x.lower().replace("(", "").replace(")", ""))).str.contains(film_title)]
 
     # Si au moins un film correspond à la recherche
     if not len(df_display_titles) > 0:
