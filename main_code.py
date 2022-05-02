@@ -139,8 +139,8 @@ weight_all_reals = 1.25
 weight_all_actors = 0.6
 weight_years = 0.85
 weight_years_low = 0.75
-weight_numvotes_low = 0.5
-weight_numvotes_med = 0.65
+weight_num_votes_low = 0.5
+weight_num_votes_med = 0.65
 
 # ======================== Genres ========================
 # Créé un dictionnaire avec le nombre d'occurences de chaque genre à partir de la colonne "multigenres"
@@ -174,8 +174,8 @@ for year in df_weights.loc[:, 'year <= 1960':'year >= 1990']:
     df_weights[year] = weight_years
 
 df_weights['year <= 1960'] = weight_years_low
-df_weights['numvotes <= 3.6k'] = weight_numvotes_low
-df_weights['3.6k < numvotes > 16k'] = weight_numvotes_med
+df_weights['numvotes <= 3.6k'] = weight_num_votes_low
+df_weights['3.6k < numvotes > 16k'] = weight_num_votes_med
 weights = df_weights.iloc[0].to_list()
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
