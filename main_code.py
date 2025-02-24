@@ -44,7 +44,7 @@ l10n_en = {
     'define_movie': 'Write the name of a movie to get recommendations (Input must be a French movie name)',
     'warning_num_letters': "The title of the movie you're looking for must contain at least 3 letters",
     'warning_no_movie': "No movies was found, please choose another one.",
-    'saga_lotr_fullname': 'Lord of the Rings',
+    'saga_lotr_fullname': 'Seigneur des anneaux',
     'found_movies': "The following movies result from your search:",
     'relevant_movie': "The most relevant seems to be '{}' from {}.",
     'movie_selector': 'Select the desired movie in the following list. Default: {} ({})',
