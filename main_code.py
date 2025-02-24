@@ -96,7 +96,7 @@ st.title(l10n['title'])
 # "https://www.imdb.com/title/" + title_id + "/"
 
 # Chargement de la base principale
-@st.cache
+@st.cache_data
 def loading_dataframe():
     # Cache la base de base
     df_full_final_x = pd.read_csv(
@@ -276,7 +276,7 @@ else:
                 model_nn = NearestNeighbors(
                     n_neighbors=n_neighbors_num,
                     metric_params={"w": weights},
-                    metric="wminkowski"
+                    metric="minkowski"
                 ).fit(X)
 
                 selected_movies_index = \
